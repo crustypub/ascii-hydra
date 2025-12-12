@@ -1,4 +1,5 @@
 # ASCII Hydra
+![Demo](https://github.com/crustypub/ascii-hydra/blob/master/gameplay.gif)
 
 ASCII Hydra is a classic snake game implemented in Rust that runs directly in your terminal. Control the growing hydra, eat the food, and avoid collisions with yourself and the walls.
 
