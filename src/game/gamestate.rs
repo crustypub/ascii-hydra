@@ -14,6 +14,7 @@ pub struct GameState {
     pub tail_to_clear: Option<(u16, u16)>,
     pub berry_position: (u16, u16),
     pub ate_food: bool,
+    pub game_speed: u64,
 }
 
 fn get_snake_coordinates() -> Vec<(u16, u16)> {
@@ -46,6 +47,13 @@ impl GameState {
             tail_to_clear: get_snake_coordinates().last().copied(),
             berry_position: get_berry_random_coordinates(),
             ate_food: false,
+            game_speed: 250,
+        }
+    }
+
+    fn game_speed_up(&mut self) {
+        if self.game_speed > 50 {
+            self.game_speed = self.game_speed - 50;
         }
     }
 
@@ -100,6 +108,7 @@ impl GameState {
             self.berry_position = get_berry_random_coordinates();
             self.ate_food = true;
             self.add_score();
+            self.game_speed_up();
         } else if self.berry_position != head {
             self.ate_food = false;
         }

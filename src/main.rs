@@ -14,9 +14,6 @@ mod game;
 use crate::game::gamestate::Action;
 
 fn main() -> std::io::Result<()> {
-    // Частота обновления
-    let frame_duration = Duration::from_millis(500); // .5 секунд
-
     // Глобальное состояние игры.
     let mut game_state = game::gamestate::GameState::new();
 
@@ -30,6 +27,9 @@ fn main() -> std::io::Result<()> {
 
     // ГЛАВНЫЙ ИГРОВОЙ ЦИКЛ
     'game_loop: loop {
+        // Частота обновления
+        let frame_duration = Duration::from_millis(game_state.game_speed);
+
         // 1. ОБРАБОТКА ВВОДА
         if event::poll(std::time::Duration::from_millis(16))? {
             // ~60 FPS
