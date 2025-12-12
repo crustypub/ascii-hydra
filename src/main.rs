@@ -14,7 +14,7 @@ mod game;
 
 fn main() -> std::io::Result<()> {
     // Частота обновления
-    let frame_duration = Duration::from_millis(1000); // 1 секунда
+    let frame_duration = Duration::from_millis(500); // .5 секунд
 
     // Глобальное состояние игры.
     let mut game_state = game::gamestate::GameState::new();
@@ -29,12 +29,6 @@ fn main() -> std::io::Result<()> {
 
     // ГЛАВНЫЙ ИГРОВОЙ ЦИКЛ
     'game_loop: loop {
-        // Обновление
-        game_state.update();
-
-        // Рендер
-        game::gameplay::render(&game_state)?;
-
         // 1. ОБРАБОТКА ВВОДА
         if event::poll(std::time::Duration::from_millis(16))? {
             // ~60 FPS
@@ -44,10 +38,28 @@ fn main() -> std::io::Result<()> {
                         // Выход из игры
                         break 'game_loop;
                     }
+                    KeyCode::Left => {
+                        game_state.change_direction("left".to_string());
+                    }
+                    KeyCode::Right => {
+                        game_state.change_direction("right".to_string());
+                    }
+                    KeyCode::Up => {
+                        game_state.change_direction("up".to_string());
+                    }
+                    KeyCode::Down => {
+                        game_state.change_direction("down".to_string());
+                    }
                     _ => {} // Игнорируем другие клавиши
                 }
             }
         }
+
+        // Обновление
+        game_state.update();
+
+        // Рендер
+        game::gameplay::render(&game_state)?;
 
         let frame_start = Instant::now(); // Для замера времени
 

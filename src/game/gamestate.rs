@@ -16,6 +16,7 @@ fn get_snake_coordinates() -> Vec<(u16, u16)> {
 
     coordinates.push((width / 2, height / 2));
     coordinates.push((width / 2 - 1, height / 2));
+    coordinates.push((width / 2 - 2, height / 2));
     return coordinates;
 }
 
@@ -41,6 +42,10 @@ impl GameState {
         self.score = 0;
     }
 
+    pub fn change_direction(&mut self, direction: String) {
+        self.direction = direction;
+    }
+
     pub fn update(&mut self) {
         // 1. Запоминаем старый хвост
         self.tail_to_clear = self.snake.last().copied();
@@ -55,10 +60,10 @@ impl GameState {
             _ => head,
         };
 
+        self.snake.pop();
         // 3. Двигаем змейку: добавляем голову, удаляем хвост
         self.snake.insert(0, new_head);
 
-        self.snake.pop();
         // // Если не съели еду - удаляем хвост
         // if !self.ate_food {
         //     self.snake.pop();
