@@ -11,6 +11,7 @@ use std::{
     time::{Duration, Instant},
 };
 mod game;
+use crate::game::gamestate::Action;
 
 fn main() -> std::io::Result<()> {
     // Частота обновления
@@ -56,7 +57,12 @@ fn main() -> std::io::Result<()> {
         }
 
         // Обновление
-        game_state.update();
+        // game_state.update();
+
+        match game_state.update() {
+            Action::Break => break 'game_loop,
+            _ => {}
+        }
 
         // Рендер
         game::gameplay::render(&game_state)?;

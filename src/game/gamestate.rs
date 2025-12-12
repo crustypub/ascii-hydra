@@ -1,5 +1,9 @@
 use crossterm::terminal;
-use std::io::Result;
+
+pub enum Action {
+    Continue,
+    Break,
+}
 
 pub struct GameState {
     pub score: u32,
@@ -15,8 +19,8 @@ fn get_snake_coordinates() -> Vec<(u16, u16)> {
     let mut coordinates = vec![];
 
     coordinates.push((width / 2, height / 2));
-    coordinates.push((width / 2 - 1, height / 2));
-    coordinates.push((width / 2 - 2, height / 2));
+    coordinates.push((width / 2 + 1, height / 2));
+    coordinates.push((width / 2 + 2, height / 2));
     return coordinates;
 }
 
@@ -46,7 +50,9 @@ impl GameState {
         self.direction = direction;
     }
 
-    pub fn update(&mut self) {
+    pub fn update(&mut self) -> Action {
+        let (width, height) = terminal::size().expect("Cant get terminal size"); // (columns, rows)
+
         // 1. Запоминаем старый хвост
         self.tail_to_clear = self.snake.last().copied();
 
@@ -60,6 +66,20 @@ impl GameState {
             _ => head,
         };
 
+        let (head_x, head_y) = new_head;
+
+        for (x, y) in self.snake.clone() {
+            if head_x == x && head_y == y {
+                println!("Game Over!");
+                return Action::Break;
+            }
+        }
+
+        if head_x == 0 || head_y == 0 || head_x == width - 1 || head_y == height - 3 {
+            println!("Game Over");
+            return Action::Break;
+        }
+
         self.snake.pop();
         // 3. Двигаем змейку: добавляем голову, удаляем хвост
         self.snake.insert(0, new_head);
@@ -72,5 +92,7 @@ impl GameState {
         //     self.ate_food = false;
         //     // Если съели еду, хвост НЕ удаляем, змейка растёт
         // }
+
+        return Action::Continue;
     }
 }
