@@ -64,10 +64,6 @@ impl GameState {
         }
     }
 
-    pub fn reset(&mut self) {
-        self.score = 0;
-    }
-
     pub fn change_direction(&mut self, direction: String) {
         self.direction = direction;
     }
