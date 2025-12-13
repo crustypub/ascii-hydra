@@ -40,16 +40,24 @@ fn main() -> std::io::Result<()> {
                         break 'game_loop;
                     }
                     KeyCode::Left => {
-                        game_state.change_direction("left".to_string());
+                        if game_state.direction != "right" {
+                            game_state.change_direction("left".to_string());
+                        }
                     }
                     KeyCode::Right => {
-                        game_state.change_direction("right".to_string());
+                        if game_state.direction != "left" {
+                            game_state.change_direction("right".to_string());
+                        }
                     }
                     KeyCode::Up => {
-                        game_state.change_direction("up".to_string());
+                        if game_state.direction != "down" {
+                            game_state.change_direction("up".to_string());
+                        }
                     }
                     KeyCode::Down => {
-                        game_state.change_direction("down".to_string());
+                        if game_state.direction != "up" {
+                            game_state.change_direction("down".to_string());
+                        }
                     }
                     _ => {} // Игнорируем другие клавиши
                 }
